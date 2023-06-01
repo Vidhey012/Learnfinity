@@ -1,0 +1,40 @@
+{% extends 'base.html'%} {% block title %}{{ student.firstname }} {{ student.lastname }}{% endblock%} {% block content %}
+<div class="profile_container">
+    <section class="left_side_card">
+        <div class="css-after">
+            <img src="{{ url_for('static', filename='student_dp.png') }}" />
+        </div>
+        <div class="information">
+            <h1>{{ student.firstname }} {{ student.lastname }}</h1>
+            <hr style="color: #fff; margin-bottom: 2rem;">
+            <h3>Enrolled in {{ course_count }} Courses</h3>
+            <h3>Attended {{ assessment_count }} Assessments</h3>
+            <h3>Joined on {{ student.join_date }}</h3>
+        </div>
+    </section>
+    <div class="right_side_card_container">
+        <div class="profile_heading">Enrolled Courses</div>
+        {% for course in courses %}
+        <div class="browse_course" id="courseBox{{ loop.index }}">
+            <div class="browse_course-preview">
+                <h5>Course</h5>
+                <h2>{{ course.course_title }}</h2>
+            </div>
+            <div class="browse_course-info">
+                <h5>Instructor: {{ course.teacher }}</h5>
+                <h2>Category:</h2>
+                <h2>{{ course.category }}</h2>
+                <button class="browse_btn" id="view-course-button{{ course.course_id }}">View Course</button>
+                <script>
+                    document.getElementById('view-course-button{{ course.course_id }}').onclick = function() {
+                        location.href = "{{ url_for('views.course', course_id=course.course_id) }}"
+                    }
+                </script>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock%}

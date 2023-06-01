@@ -1,0 +1,129 @@
+{% extends 'base.html'%} {% block title %}{{ course.course_title }}{% endblock%} {% block content %}
+<div class="course_content">
+    <section class="course_top">
+        <div class="course_top_title">
+            <h1>{{ course.course_title}}</h1>
+        </div>
+        <div class="course_top_title">
+            <h3>Category: {{ course.category }}</h3>
+        </div>
+
+    </section>
+    <div class="course_description">
+        <h3 style="padding-top: 1.5rem; padding-bottom: 1.5rem;">DESCRIPTION</h3>
+        <hr style="color: white;" />
+        <span>{{ course.description }}</span>
+        <hr style="color: white;" /><br> {% if rating_count != 0 %}
+        <span>Rating: {{ rating }} (by {{ rating_count }} students) </span> {% else %}
+        <span>Rating: Not rated yet </span> {% endif %}
+    </div>
+
+
+
+
+    {% if user.account_type == 'student' and not enrolled %}
+    <div class="course_button_container">
+        <button class="open-button" type="button" id="enroll_button">Enroll</button>
+        <script>
+            document.getElementById("enroll_button").onclick = function() {
+                location.href = "{{ url_for('views.enroll', course_id = course.course_id) }}"
+            };
+        </script>
+    </div>
+    {% endif %} {% if user.account_type == 'student' and enrolled and not rated %}
+    <div class="course_button_container">
+        <button class="open-button" type="button" id="feedback_button">Feedback</button>
+        <script>
+            document.getElementById("feedback_button").onclick = function() {
+                location.href = "{{ url_for('views.feedback', course_id=course.course_id) }}";
+            };
+        </script>
+    </div>
+    {% endif %} {% if user.account_type == 'teacher' and creator %}
+    <div class="course_button_container">
+        <button class="open-button" onclick="openForm('addContent')">Add Content</button>
+    </div>
+
+    <div class="add_content_container" style="margin-left: 0% !important;">
+        <div class="form-popup" id="addContent" style="background-color: rgba(235, 240, 241, 0.5); background-image: url() !important; width: 82rem; height: fit-content; margin-left: 20rem !important;">
+            <form action="{{ url_for('views.add_content', course_id=course.course_id) }}" method="POST">
+                <h2 style="font-weight: bolder; padding-bottom: 2rem;">Add Content</h2>
+                <label for="content_title"></label>
+                <input style=" width: 70rem;" type="text" class="course_title" placeholder="Content Title" name="content_title" autocomplete="off" required><br>
+
+                <label for="link"></label>
+                <input style=" width: 70rem;" type="url" class="course_url" placeholder="Link" name="link" autocomplete="off" required><br>
+
+                <button style=" width: 70rem;" type="submit" class="course_submit">Add</button>
+                <button style=" width: 70rem;" type="button" class="course_close" onclick="closeForm('addContent')">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="course_button_container">
+        <button class="open-button" onclick="openForm('addAssessment')">Add Assessment</button>
+    </div>
+
+    <div class="add_content_container" style="margin-left: 0% !important;">
+        <div class="form-popup" id="addAssessment" style="background-color: rgba(235, 240, 241, 0.5); background-image: url() !important; width: 82rem; height: fit-content; margin-left: 20rem !important;">
+            <form action="{{ url_for('views.add_assessment', course_id=course.course_id) }}" method="POST">
+                <h2 style="font-weight: bolder; padding-bottom: 2rem;">Add Assessment</h2>
+                <label for="assessment_title"></label>
+                <input style=" width: 70rem;" type="text" class="course_title" id="assessment_title_input" name="assessment_title" placeholder="Assessment Title" autocomplete="off" required>
+                <button style=" width: 70rem;" class="course_submit" type="submit" id="add_assessment_submit">Add</button>
+                <button style=" width: 70rem;" type="button" class="course_close" onclick="closeForm('addAssessment')">Close</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div class="course_outter_div">
+        <div class="course_heading">
+            <h1>Contents</h1>
+        </div>
+        {% for study_material in study_materials %}
+        <!-- show the study materials  -->
+        <div class="display_container">
+            <div class="course_display" id="contentBox{{ loop.index }}">
+                <div class="course_display_iner">
+                    <h4>{{ study_material.content_title }}</h4>
+                </div>
+            </div>
+            <script>
+                document.getElementById('contentBox{{ loop.index }}').onclick = function() {
+                    location.href = "{{ url_for('views.content', course_id=course.course_id, content_id=study_material.content_id) }}"
+                }
+            </script>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+    <div class="course_outter_div">
+        <div class="course_heading">
+            <h1>Assessments</h1>
+        </div>
+        {% for assessment in assessments %}
+        <!-- show the study materials  -->
+        <div class="display_container">
+            <div class="course_display" id="assessmentBox{{ loop.index }}">
+                <div class="course_display_iner">
+                    <h4>{{ assessment.assessment_title }}</h4>
+                </div>
+            </div>
+            <script>
+                document.getElementById('assessmentBox{{ loop.index }}').onclick = function() {
+                    location.href = "{{ url_for('views.assessment', course_id=course.course_id, assessment_id=assessment.assessment_id) }}"
+                }
+            </script>
+        </div>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+{% endblock%}
