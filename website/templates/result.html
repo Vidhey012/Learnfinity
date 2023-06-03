@@ -1,0 +1,35 @@
+{% extends 'base.html'%} {% block title %}Result{% endblock%} {% block content %}
+<div class="result_body">
+    <div class="card-wrap" id="badge">
+        <div><img src="{{ url_for('static', filename='logo2.png') }}" alt="logo-image" style="position:absolute ; margin-top: 0.6rem; margin-left:0.5rem ; height:90px; width:100px;" /></div>
+
+        <div class="card-header one">
+            <div><img src="{{ url_for('static', filename='badge.png') }}" alt="heading-image" style="position: absolute; padding-left: 55px;" /></div>
+            <center>
+                <h2 style="position: relative; top:12rem; color: black; padding: 25px; padding-top: 5px;">to Mr/Ms {{stu.firstname}} {{stu.lastname}} on scoring {{marks}} % in
+                    <br/><big><big style="color: rgb(3, 3, 75);">{{course}}</big>
+                    </big><br/>{{ass}}
+                </h2>
+            </center>
+        </div>
+        <!-- <div class="card-content">
+            <h1 class="card-title" style="color: #fff;">{{ marks }}</h1>
+            <p class="card-text" style="color: #fff;">Thanks For Participating the assessment. Hope you have a great day</p>
+        </div> -->
+    </div>
+    <br/>
+    <a href="javascript:download()"><img class="bgimg" src="{{ url_for('static', filename='download.gif') }}" alt="download-image" style="position: relative; top:200px; left:-100px; height: 80px; width: 80px; border-radius: 50px;" /></a>
+    <script type="text/javascript">
+        function download() {
+            const divElement = document.getElementById('badge');
+            html2canvas(divElement).then(function(canvas) {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = '{{course}}_BADGE.png';
+                link.click();
+            });
+        }
+    </script>
+</div>
+
+{% endblock%}

@@ -1,0 +1,71 @@
+{% extends 'base.html'%} {% block title %}Add Questions{% endblock%} {% block content %}
+
+<div class="question_add_body">
+    <div class="question_add_account_container">
+        <div class="question_add_account_title" style="font-weight: bolder; color: white; margin-bottom: 2rem;">Add Questions</div>
+        <div class="account_content">
+            {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %} {% if category == 'error' %}
+            <div class="alert">
+                <span class="alertclosebtn" onclick="this.parentElement.style.display='none';">&times;</span> {{ message }}
+            </div>
+            {% endif %} {% endfor %} {% endif %} {% endwith %}
+            <form method="POST">
+                <div class="account_input-box"><input style="border-radius: 20px;" type="text" name="text" placeholder="Question" autocomplete="off" required></div>
+                <div class="account_input-box"><input style="border-radius: 20px;" type="text" name="option1" placeholder="option 1" autocomplete="off" required></div>
+                <div class="account_input-box"><input style="border-radius: 20px;" type="text" name="option2" placeholder="option 2" autocomplete="off" required></div>
+                <div class="account_input-box"><input style="border-radius: 20px;" type="text" name="option3" placeholder="option 3" autocomplete="off" required></div>
+                <div class="account_input-box"><input style="border-radius: 20px;" type="text" name="option4" placeholder="option 4" autocomplete="off" required></div>
+                <div class="account_input-box">
+                    <input type="text" style="border-radius: 20px;" list="options" name="correct" placeholder="Correct Answer" autocomplete="off">
+                    <datalist id="options">
+                        <option value="1">Option1</option>
+                        <option value="2">Option2</option>
+                        <option value="3">Option3</option>
+                        <option value="4">Option4</option>
+
+                    </datalist>
+                </div>
+                <div class="assessment_footer-button"><button class="assessment_submitBtn" type="submit" style="border-radius: 20px;">add</button>
+                </div>
+            </form>
+            <div class="assessment_footer-button">
+                <button class="assessment_submitBtn" id="assessment_submit_redirect" style="border-radius: 20px;"> Finish </button>
+                <script>
+                    document.getElementById('assessment_submit_redirect').onclick = function() {
+                        location.href = "{{ url_for('views.course', course_id=course.course_id) }}"
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<h1 class="h1class">Questions</h1>
+{% for question in questions %}
+<div class="assessment_body">
+    <div class="assessment_quize">
+        <div class="assessment_question-bar">
+            <h2 class="assessment_qestion"><label for="options{{ loop.index }}">{{ question.text }}</label></h2>
+            <ul>
+                <li>
+                    <input type="radio" name="options{{ loop.index }}" value="1" id="a" class="assessment_ansList">
+                    <label for="options{{ loop.index }}" class="assessment_ansa">{{ question.option1 }}</label>
+                </li>
+                <li>
+                    <input type="radio" name="options{{ loop.index }}" value="2" id="b" class="ansList">
+                    <label for="options{{ loop.index }}" class="assessment_ansb">{{ question.option2 }}</label>
+                </li>
+                <li>
+                    <input type="radio" name="options{{ loop.index }}" value="3" id="c" class="ansList">
+                    <label for="options{{ loop.index }}" class="assessment_ansc">{{ question.option3 }}</label>
+                </li>
+                <li>
+                    <input type="radio" name="options{{ loop.index }}" value="4" id="d" class="ansList">
+                    <label for="options{{ loop.index }}" class="assessment_ansd">{{ question.option4 }}</label>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</div>
+{% endfor %} {% endblock%}

@@ -1,0 +1,29 @@
+{% extends 'base.html'%} {% block title %}{{ title }}{% endblock%} {% block content %}
+<div class="browse_body" style="padding-bottom: 2rem;">
+    <h1 style="font-size: 50px; font-family:monospace;">
+        <img src="{{ url_for('static', filename='search.png') }}" style="margin-top: 3rem; margin-bottom: 1rem;" alt="search-image" />
+    </h1>
+    {% for course in courses %}
+    <div class="browse_courses-container">
+        <div class="browse_course">
+            <div class="browse_course-preview">
+                <h5>Course</h5>
+                <h2>{{ course.course_title}}</h2>
+            </div>
+            <div class="browse_course-info">
+                <h5>Instructor: {{ course.teacher }}</h5>
+                <h2>Category:</h2>
+                <h2>{{ course.category }}</h2>
+                <button class="browse_btn" id="view-course-button{{ course.course_id }}">View Course</button>
+                <script>
+                    document.getElementById('view-course-button{{ course.course_id }}').onclick = function() {
+                        location.href = "{{ url_for('views.course', course_id=course.course_id) }}"
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock%}
